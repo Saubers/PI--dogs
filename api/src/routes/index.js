@@ -8,6 +8,6 @@ const dogsRoutes = require('./dogs');
 // Ejemplo: router.use('/auth', authRouter);
 router.use('/', dogsRoutes)
 router.use('/dogs', dogsRoutes);
-router.use('/dogs?name=:', dogsRoutes)
+router.use('/temperament', dogsRoutes)
 
 module.exports = router;

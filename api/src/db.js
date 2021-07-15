@@ -1,7 +1,6 @@
 require('dotenv').config();
 const dogTemp = require('./models/temp')
 const dogBreed = require('./models/breed')
-const dog = require('./models/Dog')
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
@@ -19,7 +18,6 @@ const db = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`,
 
 const temperament = dogTemp(db)
 const breed = dogBreed(db)
-const dogData = dog(db)
 
 const basename = path.basename(__filename);
 
@@ -45,7 +43,6 @@ db.models = Object.fromEntries(capsEntries);
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
-dogData.hasOne(breed);
 
 breed.belongsToMany(temperament, { through: "breed_temperament" });
 temperament.belongsToMany(breed, { through: "breed_temperament" })
@@ -54,6 +51,5 @@ temperament.belongsToMany(breed, { through: "breed_temperament" })
 module.exports = { // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: db,     // para importart la conexión { conn } = require('./db.js');
   temperament,
-  breed,
-  dogData
+  breed
 };
