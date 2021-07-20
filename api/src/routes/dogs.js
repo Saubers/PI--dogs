@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const fetch = require("node-fetch");
 const { breeds, temperament } = require("../db");
+const { createDog, findAll, dogDetail, dogTemp } = require('../models/breed')
 
 const { API_KEY } = process.env;
 
@@ -42,7 +43,7 @@ router.get("/dogs", async function (req, res) {
             },
           ],
         });
-        breed.forEach((data) => {
+        breed.map((data) => {
           if (data.dataValues.name.includes(name)) {
             let temperament = data.dataValues.temperament.map((temp) => {
               return temp.dataValues.tempName;
@@ -76,7 +77,7 @@ router.get("/dogs", async function (req, res) {
         let breedscr = await breeds?.findAll({
           include: Temperament,
         });
-        breedscr?.forEach((data) => {
+        breedscr?.map((data) => {
           let temperaments = data.dataValues.temperament.map((temp) => {
             return temp.dataValues.tempName;
           });
@@ -162,7 +163,7 @@ let temp = [];
 fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${API_KEY}`)
   .then((response) => response.json())
   .then((json) => {
-    json?.forEach((data) => {
+    json?.map((data) => {
       let temps = data.temperament?.split(", ");
       temps?.forEach((data) => {
         if (!temp.find((tp) => tp.name === data)) {
@@ -172,7 +173,7 @@ fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${API_KEY}`)
     });
   })
   .then(() => {
-    temp.forEach((data) => {
+    temp.map((data) => {
       temperament.findOrCreate({
         where: {
           name: data.name,
